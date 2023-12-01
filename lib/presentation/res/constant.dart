@@ -5,7 +5,4 @@ class Constants {
   // Key api google places
   static const String keyGooglePlaces =
       "AIzaSyDtLxBSzPRNpy-u_bALJbNCAcpAlKvky5Y";
-
-  static RegExp emailValid = RegExp(
-      r"^[a-zA-Z0-9.\-_]+@(?=[a-zA-Z0-9\-_])(?=[a-zA-Z0-9.\-_])[a-zA-Z0-9.\-_]{1,}(?=[a-zA-Z0-9\-_]).\.(?=[a-zA-Z0-9])[a-zA-Z0-9]{2,}$");
 }

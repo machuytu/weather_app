@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/autocomplete_predictions.dart';
 import 'package:weather/weather.dart';
 
 abstract class InitPageState extends Equatable {
@@ -20,7 +19,8 @@ class UnInitPageState extends InitPageState {
 /// Initialized
 class InInitPageState extends InitPageState {
   final Weather? data;
-  const InInitPageState({this.data});
+  final List<Weather>? list;
+  const InInitPageState({this.data, this.list});
 
   @override
   String toString() => 'InInitPageState $data';

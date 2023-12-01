@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:weather_app/presentation/res/text_data.dart';
+import 'package:get/get.dart';
+import 'package:weather_app/presentation/res/images_data.dart';
 import 'package:weather_app/presentation/screen/init_page/index.dart';
 import 'package:weather_app/presentation/widget/loading_widget.dart';
 import 'package:weather_app/presentation/screen/init_page/local_widget/widget_search_bar.dart';
+
+import 'local_widget/widget_current_weather.dart';
+
+import 'local_widget/widget_list_weather/widget_list_weather.dart';
+import 'local_widget/widget_measure_temperature.dart';
 
 class InitPageScreen extends StatefulWidget {
   const InitPageScreen({
@@ -33,6 +38,7 @@ class InitPageScreenState extends State<InitPageScreen> {
 
   @override
   void dispose() {
+    widget._initPageBloc.close();
     super.dispose();
   }
 
@@ -58,70 +64,72 @@ class InitPageScreenState extends State<InitPageScreen> {
             ));
           }
           if (currentState is InInitPageState) {
-            return SafeArea(
-              child: SizedBox(
-                height: size.height,
-                width: size.width,
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          top: 100.0, left: 8.0, right: 8.0),
-                      // UI current weather
-                      child: body(currentState),
-                    ),
-                    // Search bar location
-                    WidgetSearchBar(widget._initPageBloc),
-                  ],
-                ),
-              ),
-            );
+            return _buildWeatherData(size, currentState);
           }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingWidget();
         });
   }
 
-  Widget body(InInitPageState currentState) {
+  Widget _buildWeatherData(Size size, InInitPageState currentState) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            ImagesData.background,
+            fit: BoxFit.cover,
+          ),
+        ),
+        SafeArea(
+          child: SizedBox(
+            height: size.height,
+            width: size.width,
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 80.0, left: 8.0, right: 8.0),
+                  // UI current weather and list weather in 5 days
+                  child: _body(currentState),
+                ),
+                // Search bar location
+                WidgetSearchBar(widget._initPageBloc),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _body(InInitPageState currentState) {
     // empty data
     if (currentState.data == null) {
       return Container();
     }
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Image.network(
-              "https://openweathermap.org/img/wn/${currentState.data!.weatherIcon}@4x.png",
-            ),
-            SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "${currentState.data!.temperature!.celsius!.toInt()} ${isCelsius ? "\u2103" : "\u2109"} ",
-                    style: TextData.mainTemperature,
-                  ),
-                  Text(
-                    currentState.data!.weatherMain!,
-                    style: TextData.mainWeather,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        Text(
-          DateFormat('EE').format(currentState.data!.date!),
-          style: TextData.headerText,
-        ),
-        Text(
-          DateFormat('dd MMMM yy').format(currentState.data!.date!),
-          style: TextData.headerText,
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Change measure temperature between Celsius and Fahrenheit
+          WidgetMeasureTemperature(
+            isCelsius: isCelsius,
+            onChanged: (value) {
+              setState(() {
+                isCelsius = !isCelsius;
+              });
+            },
+          ),
+          const SizedBox(height: 10),
+
+          // Current weather
+          WidgetCurrentWeather(
+              isCelsius: isCelsius, weather: currentState.data),
+          const SizedBox(height: 20),
+
+          // Current weather
+          WidgetListWeather(
+              isCelsius: isCelsius, listWeather: currentState.list),
+        ],
+      ),
     );
   }
 

@@ -1,9 +1,20 @@
 class ImagesData {
-  static const String cloudy = "assets/svg/cloudy.svg";
-  static const String sunCloudy = "assets/svg/sun_cloudy.svg";
-  static const String rainny = "assets/svg/rainny.svg";
-  static const String moon = "assets/svg/moon.svg";
-  static const String categoriesBackgroundBur = "assets/svg/sunny.svg";
+  static const String dClear = "assets/svg/d_clear.svg";
+  static const String nClear = "assets/svg/n_clear.svg";
+  static const String dFewClouds = "assets/svg/d_few_clouds.svg";
+  static const String nFewClouds = "assets/svg/n_few_clouds.svg";
+  static const String brokenClouds = "assets/svg/broken_clouds.svg";
+  static const String dRain = "assets/svg/d_rain.svg";
+  static const String nRain = "assets/svg/n_rain.svg";
+  static const String dScatteredClouds = "assets/svg/d_scattered_clouds.svg";
+  static const String nScatteredClouds = "assets/svg/n_scattered_clouds.svg";
+  static const String mist = "assets/svg/mist.svg";
+  static const String showerRain = "assets/svg/shower_rain.svg";
+  static const String snow = "assets/svg/snow.svg";
+  static const String thunderstorm = "assets/svg/thunderstorm.svg";
+
+  // background
+  static const String background = "assets/png/background.png";
 
   static const String loading = "assets/loading.gif";
 }

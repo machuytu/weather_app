@@ -5,7 +5,6 @@ import 'package:weather_app/presentation/res/constant.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
 import 'package:weather_app/presentation/res/text_data.dart';
 import 'package:weather_app/presentation/screen/init_page/index.dart';
-import 'package:weather_app/presentation/screen/init_page/init_page_bloc.dart';
 import 'package:weather_app/presentation/util/common_dialog.dart';
 import 'package:weather_app/presentation/widget/another_flushbar.dart';
 
@@ -73,7 +72,7 @@ class _WidgetSearchBarState extends State<WidgetSearchBar> {
         children: [
           SearchBar(
             controller: searchController,
-            hintText: "Location",
+            hintText: "Find location/country",
             trailing: <Widget>[
               if (searchController.text.isNotEmpty)
                 IconButton(
@@ -94,22 +93,25 @@ class _WidgetSearchBarState extends State<WidgetSearchBar> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 80.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: predictions.length,
-              itemBuilder: (context, index) {
-                final item = predictions[index];
-                return Container(
-                  decoration: const BoxDecoration(color: Colors.black),
-                  child: ListTile(
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFFBFE),
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: predictions.length,
+                itemBuilder: (context, index) {
+                  final item = predictions[index];
+                  return ListTile(
                     onTap: () => chooseLocation(item, context),
                     title: Text(
                       item.primaryText,
-                      style: TextData.bodyText,
+                      style: TextData.bodyText2,
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -128,6 +130,8 @@ class _WidgetSearchBarState extends State<WidgetSearchBar> {
   chooseLocation(AutocompletePrediction item, BuildContext context) async {
     FlushBar flushBar = FlushBar();
     try {
+      searchController.text = item.primaryText;
+      FocusScope.of(context).unfocus();
       DialogService dialogService = DialogService();
       dialogService.showLoaderDialogShort(context);
       // Get the location from the placeId
@@ -136,8 +140,11 @@ class _WidgetSearchBarState extends State<WidgetSearchBar> {
       // Get current weather from openweathermap
       Weather forecast = await wf.currentWeatherByLocation(
           res.place!.latLng!.lat, res.place!.latLng!.lng);
+      // Get list weather 5 day / 3hr forecast from openweathermap
+      List<Weather> listForecast = await wf.fiveDayForecastByLocation(
+          res.place!.latLng!.lat, res.place!.latLng!.lng);
       Get.back();
-      widget._initPageBloc.add(LoadInitPageEvent(forecast));
+      widget._initPageBloc.add(LoadInitPageEvent(forecast, listForecast));
       predictions = [];
       setState(() {});
     } catch (e) {

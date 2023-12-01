@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places_sdk_platform_interface/src/types/autocomplete_predictions.dart';
 import 'package:weather/weather.dart';
 import 'package:weather_app/presentation/screen/init_page/index.dart';
 
@@ -30,13 +29,14 @@ class InitInitPageEvent extends InitPageEvent {
 
 class LoadInitPageEvent extends InitPageEvent {
   final Weather data;
-  LoadInitPageEvent(this.data);
+  final List<Weather> listForecast;
+  LoadInitPageEvent(this.data, this.listForecast);
   @override
   Stream<InitPageState> applyAsync(
       {InitPageState? currentState, InitPageBloc? bloc}) async* {
     try {
       yield const UnInitPageState();
-      yield InInitPageState(data: data);
+      yield InInitPageState(data: data, list: listForecast);
     } catch (_, stackTrace) {
       developer.log('$_',
           name: 'LoadInitPageEvent', error: _, stackTrace: stackTrace);
