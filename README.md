@@ -6,6 +6,7 @@ A basic Flutter mobile app that fetches and displays current weather information
 
 - [Details](#details)
 - [Getting Started](#getting-started)
+- [Screenshots](#screenshots)
 - [Project Structure](#project-structure)
 - [Package Credits](#package-credits)
 - [Evaluation Criteria](#evaluation-criteria)
@@ -47,6 +48,14 @@ Follow these steps to set up and run the Weather App:
    flutter pub get
    flutter run
    ```
+
+## Screenshots
+
+<img src="assets/screenshots/1.jpg" alt="drawing" width="150"/>
+<img src="assets/screenshots/2.jpg" alt="drawing" width="150"/>
+<img src="assets/screenshots/3.jpg" alt="drawing" width="150"/>
+<img src="assets/screenshots/4.jpg" alt="drawing" width="150"/>
+<img src="assets/screenshots/5.jpg" alt="drawing" width="150"/>
 
 ## Project Structure
 
