@@ -29,9 +29,12 @@ class WidgetListWeatherItem extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  Text(
-                    DateFormat('EE').format(weather.date!),
-                    style: TextData.mainListWeather,
+                  SizedBox(
+                    width: 57,
+                    child: Text(
+                      DateFormat('EE').format(weather.date!),
+                      style: TextData.mainListWeather,
+                    ),
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -46,6 +49,7 @@ class WidgetListWeatherItem extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(width: 5),
                   WidgetWeatherIcon(
                     weatherIconCode: weather.weatherIcon ?? "",
                     height: 60,

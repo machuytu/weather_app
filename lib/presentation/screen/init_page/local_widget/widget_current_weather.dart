@@ -31,20 +31,23 @@ class WidgetCurrentWeather extends StatelessWidget {
               // Weather icon
               WidgetWeatherIcon(weatherIconCode: weather!.weatherIcon ?? ""),
               // Temperature, main weather, description weather,
-              SizedBox(
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "${isCelsius ? "${weather!.temperature!.celsius!.toInt()}\u2103" : "${weather!.temperature!.fahrenheit!.toInt()}\u2109"} ",
+                      textAlign: TextAlign.center,
                       style: TextData.mainTemperature,
                     ),
                     Text(
                       weather!.weatherMain!.capitalize!,
+                      textAlign: TextAlign.center,
                       style: TextData.mainWeather,
                     ),
                     Text(
                       weather!.weatherDescription!.capitalize!,
+                      textAlign: TextAlign.center,
                       style: TextData.descriptionText,
                     ),
                   ],

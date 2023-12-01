@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
-
 import 'presentation/list_routes.dart';
-import 'presentation/res/colors_data.dart';
 import 'presentation/res/route_name.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Show splash app
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(MyApp());
 }
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         navigatorKey: StateManager.navigatorKey,
         theme: ThemeData(
+          fontFamily: "SF-Pro",
           appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
           scaffoldBackgroundColor: Colors.black,
           primaryColor: Colors.black,
@@ -34,6 +36,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Get global state
 class StateManager {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

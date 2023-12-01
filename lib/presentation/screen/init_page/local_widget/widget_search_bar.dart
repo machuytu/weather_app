@@ -1,12 +1,20 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather/weather.dart';
-import 'package:weather_app/presentation/res/constant.dart';
+import 'package:weather_app/data/model/location_model.dart';
+import 'package:weather_app/domain/usecase/get_current_weather.dart';
+import 'package:weather_app/domain/usecase/get_list_predictions.dart';
+import 'package:weather_app/domain/usecase/get_location.dart';
 import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart';
+import 'package:weather_app/presentation/res/colors_data.dart';
 import 'package:weather_app/presentation/res/text_data.dart';
 import 'package:weather_app/presentation/screen/init_page/index.dart';
 import 'package:weather_app/presentation/util/common_dialog.dart';
 import 'package:weather_app/presentation/widget/another_flushbar.dart';
+import '../../../../domain/usecase/get_list_five_days_weather.dart';
+import '../../../../data/local/shared_preferences.dart';
 
 class WidgetSearchBar extends StatefulWidget {
   final InitPageBloc _initPageBloc;
@@ -19,48 +27,32 @@ class WidgetSearchBar extends StatefulWidget {
 }
 
 class _WidgetSearchBarState extends State<WidgetSearchBar> {
-  //* Package of openweathermap
-  late WeatherFactory wf;
-  // Use Google api to search place
-  late FlutterGooglePlacesSdk googlePlace;
-  List<AutocompletePrediction> predictions = [];
-  // get place information
-  List<PlaceField> placeFields = [
-    PlaceField.Address,
-    PlaceField.AddressComponents,
-    PlaceField.BusinessStatus,
-    PlaceField.Id,
-    PlaceField.Location,
-    PlaceField.Name,
-    PlaceField.OpeningHours,
-    PlaceField.PhoneNumber,
-    PlaceField.PhotoMetadatas,
-    PlaceField.PlusCode,
-    PlaceField.PriceLevel,
-    PlaceField.Rating,
-    PlaceField.Types,
-    PlaceField.UserRatingsTotal,
-    PlaceField.UTCOffset,
-    PlaceField.Viewport,
-    PlaceField.WebsiteUri,
-  ];
+  /// Use Google api to search place
+  List<AutocompletePrediction> _predictions = [];
 
-  TextEditingController searchController = TextEditingController(text: "");
+  /// Get place information
+  GetLocation getLocation = GetLocation();
 
-  @override
-  void initState() {
-    // Init google places
-    googlePlace = FlutterGooglePlacesSdk(Constants.keyGooglePlaces);
-    // Init weather api
-    wf = WeatherFactory(Constants.keyWeather);
-    super.initState();
-  }
+  /// Get list predictions with textfield
+  GetListPrediction getListPrediction = GetListPrediction();
+
+  /// Get current weather
+  GetCurrentWeather getCurrentWeather = GetCurrentWeather();
+
+  /// Get list weather 5 day / 3hr forecast from openweathermap
+  GetListFiveDaysWeather getListFiveDaysWeather = GetListFiveDaysWeather();
+
+  /// Local data
+  SharedPref sharedPref = SharedPref();
+
+  final TextEditingController _searchController =
+      TextEditingController(text: "");
+  DialogService dialogService = DialogService();
 
   @override
   void dispose() {
-    searchController.dispose();
-    predictions.clear();
-    placeFields.clear();
+    _searchController.dispose();
+    _predictions.clear();
     super.dispose();
   }
 
@@ -71,97 +63,105 @@ class _WidgetSearchBarState extends State<WidgetSearchBar> {
       child: Stack(
         children: [
           SearchBar(
-            controller: searchController,
-            hintText: "Find location/country",
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                _autoCompleteSearch(value);
+              } else {
+                _clearPredictions();
+              }
+            },
             trailing: <Widget>[
-              if (searchController.text.isNotEmpty)
+              if (_searchController.text.isNotEmpty)
                 IconButton(
                   onPressed: () {
-                    clearPredictions();
+                    _clearPredictions();
                   },
                   icon: const Icon(Icons.close),
                   selectedIcon: const Icon(Icons.brightness_2_outlined),
                 ),
             ],
-            onChanged: (value) {
-              if (value.isNotEmpty) {
-                autoCompleteSearch(value);
-              } else {
-                clearPredictions();
-              }
-            },
+            controller: _searchController,
+            hintText: "Find location/country",
+            backgroundColor:
+                MaterialStateProperty.all(ColorsData.backgroundContainer),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 80.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFFBFE),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: predictions.length,
-                itemBuilder: (context, index) {
-                  final item = predictions[index];
-                  return ListTile(
-                    onTap: () => chooseLocation(item, context),
-                    title: Text(
-                      item.primaryText,
-                      style: TextData.bodyText2,
-                    ),
-                  );
-                },
+          if (_predictions.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 80.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: ColorsData.backgroundContainer,
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _predictions.length,
+                  itemBuilder: (context, index) {
+                    final item = _predictions[index];
+                    return ListTile(
+                      onTap: () => _chooseLocation(item, context),
+                      title: Text(
+                        item.primaryText,
+                        style: TextData.bodyText2,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
   }
 
-  // clear list search and search field text
-  void clearPredictions() {
+  /// clear list search and search field text
+  void _clearPredictions() {
     return setState(() {
-      searchController.text = "";
-      predictions = [];
+      _searchController.text = "";
+      _predictions = [];
     });
   }
 
-  chooseLocation(AutocompletePrediction item, BuildContext context) async {
+  _chooseLocation(AutocompletePrediction item, BuildContext context) async {
     FlushBar flushBar = FlushBar();
     try {
-      searchController.text = item.primaryText;
+      _searchController.text = item.primaryText;
       FocusScope.of(context).unfocus();
-      DialogService dialogService = DialogService();
       dialogService.showLoaderDialogShort(context);
       // Get the location from the placeId
-      final res =
-          await googlePlace.fetchPlace(item.placeId, fields: placeFields);
+      final res = await getLocation.call(item.placeId);
+      final lat = res.place!.latLng!.lat;
+      final lng = res.place!.latLng!.lng;
       // Get current weather from openweathermap
-      Weather forecast = await wf.currentWeatherByLocation(
-          res.place!.latLng!.lat, res.place!.latLng!.lng);
+      Weather forecast = await getCurrentWeather.call(lat, lng);
+
       // Get list weather 5 day / 3hr forecast from openweathermap
-      List<Weather> listForecast = await wf.fiveDayForecastByLocation(
-          res.place!.latLng!.lat, res.place!.latLng!.lng);
+      List<Weather> listForecast = await getListFiveDaysWeather.call(lat, lng);
+
+      // Store last location chose by the user
+      LocationModel locationModel = LocationModel(lat: lat, lng: lng);
+      sharedPref.save(
+          "fetchPlaceResponse", json.encode(locationModel.toJson()));
+
       Get.back();
       widget._initPageBloc.add(LoadInitPageEvent(forecast, listForecast));
-      predictions = [];
+      _predictions = [];
       setState(() {});
     } catch (e) {
-      clearPredictions();
+      _clearPredictions();
       Get.back();
-      // if check failed with fetchPlace or forecast error arlet for user try again
+      // If check failed with fetchPlace or forecast error arlet for user try again
       flushBar.showFlushBar(
           title: "Not have weather on this location, try again");
     }
   }
 
-  // Search word by word of location
-  Future<void> autoCompleteSearch(String value) async {
-    var result = await googlePlace.findAutocompletePredictions(value);
+  /// Search word by word of location
+  Future<void> _autoCompleteSearch(String value) async {
+    var result = await getListPrediction.call(value);
     if (mounted) {
       setState(() {
-        predictions = result.predictions;
+        _predictions = result.predictions;
       });
     }
   }

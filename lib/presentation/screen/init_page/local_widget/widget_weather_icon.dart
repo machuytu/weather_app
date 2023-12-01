@@ -87,7 +87,7 @@ class WidgetWeatherIcon extends StatelessWidget {
       return ImagesData.snow;
     }
     // Mist
-    else if (weatherIconCode == "14d" || weatherIconCode == "14n") {
+    else if (weatherIconCode == "50d" || weatherIconCode == "50n") {
       return ImagesData.mist;
     }
     return "";

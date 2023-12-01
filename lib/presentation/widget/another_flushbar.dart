@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/main.dart';
 
 class FlushBar {
+  /// Dialog arlet
   void showFlushBar({
-    Color backgroundColor = Colors.white,
-    String? image,
-    String? title,
     String? key,
     BuildContext? context,
+    Color backgroundColor = Colors.white,
+    String? image,
+
+    /// content of alert
+    String? title,
+
+    /// How long until Flushbar will hide itself
     int seconds = 3,
     Function(Flushbar<dynamic>)? onTap,
   }) {

@@ -5,7 +5,7 @@ class InitPagePage extends StatefulWidget {
   const InitPagePage({super.key});
 
   @override
-  _InitPagePageState createState() => _InitPagePageState();
+  State<InitPagePage> createState() => _InitPagePageState();
 }
 
 class _InitPagePageState extends State<InitPagePage> {

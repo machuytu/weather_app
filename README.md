@@ -35,7 +35,7 @@ Follow these steps to set up and run the Weather App:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/weather_app.git
+   git clone https://github.com/machuytu/weather_app.git
    cd weather_app
    ```
 
@@ -52,9 +52,9 @@ Follow these steps to set up and run the Weather App:
 
 The project follows a clean architecture structure:
 
-- lib/data: data layer - not use because get value on package
-- lib/domain: domain layer
-- lib/presentation: presentation layer
+- lib/data: data layer.
+- lib/domain: domain layer.
+- lib/presentation: presentation layer.
 
 ## Package credits
 
@@ -64,6 +64,8 @@ The package is built from these wonderful packages.
 | :--------------------------------------------------------- | :------------------------- |
 | [weather][weather pub]                                     | Get weather data.          |
 | [flutter_google_places_sdk][flutter_google_places_sdk pub] | Get place with google api. |
+
+API KEY on file lib/presentation/res/constant.dart. This my API KEY. If it not working, please go to GooglePlacesSdk and OpenWeather to sign in and generate your API KEY
 
 ## Evaluation Criteria
 
@@ -86,6 +88,8 @@ The package is built from these wonderful packages.
 ### Bonus Features:
 
 - Additional features change measure temperature (Celsius/Fahrenheit).
+- Local store chose measure temperature
+- Local store last chose location when re-open app
 - Get list weather 5 day / 3hr forecast from openweathermap
 
 ### Documentation and Instructions:

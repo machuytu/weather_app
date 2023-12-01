@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import '../res/images_data.dart';
 
 class LoadingWidget extends StatefulWidget {
-  const LoadingWidget({
-    super.key,
-  });
+  const LoadingWidget({super.key});
 
   @override
   State<LoadingWidget> createState() => _LoadingWidgetState();

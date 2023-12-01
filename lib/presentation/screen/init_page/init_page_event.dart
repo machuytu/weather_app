@@ -11,6 +11,7 @@ abstract class InitPageEvent {
       {InitPageState currentState, InitPageBloc bloc});
 }
 
+/// Remove data
 class UnInitPageEvent extends InitPageEvent {
   @override
   Stream<InitPageState> applyAsync(
@@ -19,6 +20,7 @@ class UnInitPageEvent extends InitPageEvent {
   }
 }
 
+/// Init bloc
 class InitInitPageEvent extends InitPageEvent {
   @override
   Stream<InitPageState> applyAsync(
@@ -27,6 +29,8 @@ class InitInitPageEvent extends InitPageEvent {
   }
 }
 
+/// Load data
+/// Require [data] and [listForecast]
 class LoadInitPageEvent extends InitPageEvent {
   final Weather data;
   final List<Weather> listForecast;

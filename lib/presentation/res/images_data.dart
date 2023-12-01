@@ -1,4 +1,5 @@
 class ImagesData {
+  // List icon weather
   static const String dClear = "assets/svg/d_clear.svg";
   static const String nClear = "assets/svg/n_clear.svg";
   static const String dFewClouds = "assets/svg/d_few_clouds.svg";
@@ -13,8 +14,8 @@ class ImagesData {
   static const String snow = "assets/svg/snow.svg";
   static const String thunderstorm = "assets/svg/thunderstorm.svg";
 
-  // background
+  // Background
   static const String background = "assets/png/background.png";
-
+  // Loading
   static const String loading = "assets/loading.gif";
 }

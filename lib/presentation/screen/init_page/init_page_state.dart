@@ -18,7 +18,9 @@ class UnInitPageState extends InitPageState {
 
 /// Initialized
 class InInitPageState extends InitPageState {
+  // Current weather
   final Weather? data;
+  // List of weather 5 days/3 hrs
   final List<Weather>? list;
   const InInitPageState({this.data, this.list});
 

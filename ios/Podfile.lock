@@ -3,7 +3,11 @@ PODS:
   - flutter_google_places_sdk_ios (0.0.1):
     - Flutter
     - GooglePlaces (~> 7.1.0)
+  - flutter_native_splash (0.0.1):
+    - Flutter
   - GooglePlaces (7.1.0)
+  - integration_test (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -11,6 +15,8 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_google_places_sdk_ios (from `.symlinks/plugins/flutter_google_places_sdk_ios/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
@@ -22,15 +28,21 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_google_places_sdk_ios:
     :path: ".symlinks/plugins/flutter_google_places_sdk_ios/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_google_places_sdk_ios: 8d3d6b935ddd9988780fcc605acd2500fd0ecdcd
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   GooglePlaces: 187946335ec3dc624de71c0a9ddcc712f19b0ee1
+  integration_test: 13825b8a9334a850581300559b8839134b124670
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: a57f30d18f102dd3ce366b1d62a55ecbef2158e5
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.13.0

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OpacityContainer extends StatelessWidget {
+  /// child widget inside the OpacityContainer
   final Widget? child;
   const OpacityContainer({super.key, this.child});
 

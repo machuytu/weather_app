@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 
 import '../../../../res/text_data.dart';
@@ -26,7 +24,7 @@ class WidgetListWeather extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("3 hour forecast in 5 days", style: TextData.bodyText3),
+          const Text("3 hours forecast in 5 days", style: TextData.bodyText3),
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
