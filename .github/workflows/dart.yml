@@ -41,8 +41,10 @@ jobs:
       - name: Run tests
         run: dart test
 
-on: push
 name: Test, Build and Release apk
+
+on: push
+
 jobs:
   build:
     name: Build APK
