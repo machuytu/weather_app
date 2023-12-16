@@ -11,14 +11,14 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: '12.x'
-      - uses: subosito/flutter-action@v3
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.1'
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk --debug --split-per-abi
       - name: Create a Release APK
-        uses: ncipollo/release-action@v3
+        uses: ncipollo/release-action@v2
         with:
           artifacts: 'build/app/outputs/apk/debug/*.apk'
           token: ${{ secrets.GITHUB_TOKEN }}
